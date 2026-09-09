@@ -23,6 +23,7 @@ const noteSchema = new mongoose.Schema({
   title: String,
   content: String,
   fileUrl: String,
+  fileType: String,
   createdAt: { type: Date, default: Date.now }
 });
 const Note = mongoose.model('Note', noteSchema);
@@ -63,8 +64,9 @@ app.post('/notes', upload.single('file'), async (req, res) => {
   try {
     const { title, content } = req.body;
     const fileUrl = req.file ? req.file.location : null;
+    const fileType = req.file ? req.file.mimetype : null;
 
-    const newNote = new Note({ title, content, fileUrl });
+    const newNote = new Note({ title, content, fileUrl, fileType });
     await newNote.save();
 
     // Redirect back to main page to reload view with updated note list
